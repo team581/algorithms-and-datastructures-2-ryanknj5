@@ -1,0 +1,100 @@
+name: Autograding Tests
+'on':
+- push
+- repository_dispatch
+permissions:
+  checks: write
+  actions: read
+  contents: read
+jobs:
+  run-autograding-tests:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-classroom[bot]'
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: "#contains() returns false when set is empty"
+      id: contains-returns-false-when-set-is-empty
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: "#contains() returns false when set is empty"
+        setup-command: ''
+        command: ./gradlew test --tests "assignment.SetTest.testContainsWhenEmpty"
+        timeout: 1
+        max-score: 1
+    - name: "#contains() works when set has 1 item"
+      id: contains-works-when-set-has-1-item
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: "#contains() works when set has 1 item"
+        setup-command: ''
+        command: ./gradlew test --tests "assignment.SetTest.testContainsWhenNotEmpty"
+        timeout: 1
+        max-score: 1
+    - name: Add multiple elements to set
+      id: add-multiple-elements-to-set
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Add multiple elements to set
+        setup-command: ''
+        command: ./gradlew test --tests "assignment.SetTest.testAddMultiple"
+        timeout: 1
+        max-score: 1
+    - name: Remove items from set
+      id: remove-items-from-set
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Remove items from set
+        setup-command: ''
+        command: ./gradlew test --tests "assignment.SetTest.testRemove"
+        timeout: 1
+        max-score: 1
+    - name: Remove non-existing elements from set
+      id: remove-non-existing-elements-from-set
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Remove non-existing elements from set
+        setup-command: ''
+        command: ./gradlew test --tests "assignment.SetTest.testRemoveNonExistingElement"
+        timeout: 1
+        max-score: 1
+    - name: Add duplicate elements to set
+      id: add-duplicate-elements-to-set
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Add duplicate elements to set
+        setup-command: ''
+        command: ./gradlew test --tests "assignment.SetTest.testAddDuplicateElement"
+        timeout: 1
+        max-score: 1
+    - name: Remove non-existing elements from empty set
+      id: remove-non-existing-elements-from-empty-set
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Remove non-existing elements from empty set
+        setup-command: ''
+        command: ./gradlew test --tests "assignment.SetTest.testRemoveFromEmptySet"
+        timeout: 1
+        max-score: 1
+    - name: Set works with non-string types
+      id: set-works-with-non-string-types
+      uses: classroom-resources/autograding-command-grader@v1
+      with:
+        test-name: Set works with non-string types
+        setup-command: ''
+        command: ./gradlew test --tests "assignment.SetTest.testWithDifferentTypes"
+        timeout: 1
+        max-score: 1
+    - name: Autograding Reporter
+      uses: classroom-resources/autograding-grading-reporter@v1
+      env:
+        CONTAINS-RETURNS-FALSE-WHEN-SET-IS-EMPTY_RESULTS: "${{steps.contains-returns-false-when-set-is-empty.outputs.result}}"
+        CONTAINS-WORKS-WHEN-SET-HAS-1-ITEM_RESULTS: "${{steps.contains-works-when-set-has-1-item.outputs.result}}"
+        ADD-MULTIPLE-ELEMENTS-TO-SET_RESULTS: "${{steps.add-multiple-elements-to-set.outputs.result}}"
+        REMOVE-ITEMS-FROM-SET_RESULTS: "${{steps.remove-items-from-set.outputs.result}}"
+        REMOVE-NON-EXISTING-ELEMENTS-FROM-SET_RESULTS: "${{steps.remove-non-existing-elements-from-set.outputs.result}}"
+        ADD-DUPLICATE-ELEMENTS-TO-SET_RESULTS: "${{steps.add-duplicate-elements-to-set.outputs.result}}"
+        REMOVE-NON-EXISTING-ELEMENTS-FROM-EMPTY-SET_RESULTS: "${{steps.remove-non-existing-elements-from-empty-set.outputs.result}}"
+        SET-WORKS-WITH-NON-STRING-TYPES_RESULTS: "${{steps.set-works-with-non-string-types.outputs.result}}"
+      with:
+        runners: contains-returns-false-when-set-is-empty,contains-works-when-set-has-1-item,add-multiple-elements-to-set,remove-items-from-set,remove-non-existing-elements-from-set,add-duplicate-elements-to-set,remove-non-existing-elements-from-empty-set,set-works-with-non-string-types
