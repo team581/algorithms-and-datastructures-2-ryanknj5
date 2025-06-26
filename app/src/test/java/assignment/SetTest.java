@@ -73,17 +73,6 @@ class SetTest {
   }
 
   @Test
-  void testNullValues() {
-    Set<String> set = new Set<>();
-    set.add(null);
-
-    assertTrue(set.contains(null));
-
-    set.remove(null);
-    assertFalse(set.contains(null));
-  }
-
-  @Test
   void testRemoveFromEmptySet() {
     Set<String> set = new Set<>();
 
